@@ -1,8 +1,6 @@
-import org.junit.Test;
-
 public class MainClass {
-    @Test
-    public void FirstTest() {
 
+    public static int getLocalNumber() {
+        return 14;
     }
 }
