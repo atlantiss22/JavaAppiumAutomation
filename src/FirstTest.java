@@ -167,7 +167,6 @@ public class FirstTest {
         return element;
     }
 
-
     private void waitForDefaultTextInSearchField() {
         WebElement element = waitForElementPresent(
                 By.id("org.wikipedia:id/search_src_text"),
