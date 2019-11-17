@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 
 public class FirstTest {
 
@@ -131,6 +132,43 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testSearchAndCancel() {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Kotlin",
+                "Cannot find search input",
+                5
+
+        );
+
+        List<WebElement> searchResults = waitForElementsPresent(
+                By.id("org.wikipedia:id/page_list_item_container"),
+                "Cannot find results of search",
+                15
+        );
+
+        Assert.assertTrue("There is only one search result", searchResults.size() > 1);
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Cannot find X to cancel search",
+                5
+        );
+
+        waitForElementPresent(
+                By.id("org.wikipedia:id/search_empty_image"),
+                "Cannot find image of empty search result",
+                5
+        );
+    }
+
     private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(errorMessage + "\n");
@@ -178,5 +216,11 @@ public class FirstTest {
                 "Search…",
                 element.getText()
         );
+    }
+
+    private List<WebElement> waitForElementsPresent(By by, String errorMessage, long timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(errorMessage + "\n");
+        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
     }
 }
