@@ -103,7 +103,7 @@ public class FirstTest {
         );
 
         waitForElementAndSendKeys(
-                By.xpath("//*[contains(@text, 'Search')]"),
+                By.xpath("//*[contains(@text, 'Search…')]"),
                 "Java",
                 "Cannot find search input",
                 5
@@ -164,6 +164,21 @@ public class FirstTest {
     private WebElement waitForElementAndClear(By by, String errorMessage, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(by, errorMessage, timeoutInSeconds);
         element.clear();
+        return element;
+    }
+
+    private WebElement waitForTextInSearchField(String value, String errorMessage, long timeoutInSeconds) {
+        WebElement element = waitForElementPresent(
+                By.id("org.wikipedia:id/search_src_text"),
+                errorMessage,
+                timeoutInSeconds);
+
+        Assert.assertEquals(
+                "We see unexpected text:",
+                "Search…",
+                element.getText()
+        );
+
         return element;
     }
 
