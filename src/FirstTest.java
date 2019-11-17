@@ -167,19 +167,4 @@ public class FirstTest {
         return element;
     }
 
-    private WebElement waitForTextInSearchField(String value, String errorMessage, long timeoutInSeconds) {
-        WebElement element = waitForElementPresent(
-                By.id("org.wikipedia:id/search_src_text"),
-                errorMessage,
-                timeoutInSeconds);
-
-        Assert.assertEquals(
-                "We see unexpected text:",
-                "Search…",
-                element.getText()
-        );
-
-        return element;
-    }
-
 }
