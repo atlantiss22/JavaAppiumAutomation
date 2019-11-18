@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -169,6 +170,31 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testAllResultsContainSearchText() {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "https",
+                "Cannot find search input",
+                5
+
+        );
+
+        List<WebElement> searchResults = waitForElementsPresent(
+                By.id("org.wikipedia:id/page_list_item_container"),
+                "Cannot find results of search",
+                15
+        );
+
+        checkAllResultsWithText(searchResults, "https");
+    }
+
     private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(errorMessage + "\n");
@@ -222,5 +248,25 @@ public class FirstTest {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(errorMessage + "\n");
         return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
+    }
+
+    private void checkAllResultsWithText(List<WebElement> results, String expectedSubstring) {
+        expectedSubstring = expectedSubstring.toLowerCase();
+        for (int i = 0; i < results.size(); i++) {
+            //Внутри результата есть заголовок и подзаголовок (или только заголовок) *или редирект
+            //=> Ищем любой элемент, который может содержать искомое слово внутри результата
+            List<WebElement> includeElements = results.get(i).findElements(By.xpath("//*"));
+
+            boolean hasText = false;
+            for (int j = 0; j < includeElements.size(); j++) {
+                if (includeElements.get(j).getText().toLowerCase().contains(expectedSubstring)) {
+                    hasText = true;
+                }
+            }
+            Assert.assertTrue(
+                    "One or more search results does not contain the search text",
+                    hasText
+            );
+        }
     }
 }
