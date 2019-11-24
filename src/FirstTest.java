@@ -5,14 +5,10 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.ScreenOrientation;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import sun.jvm.hotspot.utilities.AssertionFailure;
 
 import java.net.URL;
 import java.util.List;
@@ -442,6 +438,40 @@ public class FirstTest {
     }
 
     @Test
+    public void testTitlePresent() {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.xpath("//*[contains(@text, 'Search…')]"),
+                "Java",
+                "Cannot find search input",
+                5
+
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text = 'Object-oriented programming language']"),
+                "Cannot find 'Search Wikipedia' input",
+                5
+        );
+
+        WebElement webView = waitForElementPresent(
+                By.id("org.wikipedia:id/page_contents_container"),
+                "Cannot find web view",
+                15
+        );
+
+        assertElementPresent(
+                webView,
+                "Title is not present on element: " + webView.toString()
+        );
+    }
+
+    @Test
     public void testAmountOfNotEmptySearch() {
         waitForElementAndClick(
                 By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
@@ -799,6 +829,14 @@ public class FirstTest {
     private int getAmountOfElements(By by) {
         List elements = driver.findElements(by);
         return elements.size();
+    }
+
+    private void assertElementPresent(WebElement element, String errorMessage) {
+        try {
+            element.findElement(By.id("org.wikipedia:id/view_page_title_text"));
+        } catch (NoSuchElementException e) {
+            Assert.fail(errorMessage);
+        }
     }
 
     private void assertElementNotPresent(By by, String errorMessage) {
