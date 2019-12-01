@@ -98,12 +98,6 @@ public class ArticlePageObject extends MainPageObject {
                 5
         );
 
-//        this.waitForElementAndClick(
-//                By.id(ADD_TO_MY_LIST_OVERLAY),
-//                "Cannot find 'Got it' tip overlay",
-//                5
-//        );
-
         typeOnExistingList(nameOfFolder);
     }
 
