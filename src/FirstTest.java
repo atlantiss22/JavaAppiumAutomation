@@ -223,43 +223,6 @@ public class FirstTest extends CoreTestCase {
     }
 
     @Test
-    public void testSearchAndCancel() {
-        MainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
-                "Cannot find 'Search Wikipedia' input",
-                5
-        );
-
-        MainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
-                "Kotlin",
-                "Cannot find search input",
-                5
-
-        );
-
-        List<WebElement> searchResults = MainPageObject.waitForElementsPresent(
-                By.id("org.wikipedia:id/page_list_item_container"),
-                "Cannot find results of search",
-                15
-        );
-
-        assertTrue("There is only one search result", searchResults.size() > 1);
-
-        MainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/search_close_btn"),
-                "Cannot find X to cancel search",
-                5
-        );
-
-        MainPageObject.waitForElementPresent(
-                By.id("org.wikipedia:id/search_empty_image"),
-                "Cannot find image of empty search result",
-                5
-        );
-    }
-
-    @Test
     public void testAllResultsContainSearchText() {
         MainPageObject.waitForElementAndClick(
                 By.id("org.wikipedia:id/search_container"),

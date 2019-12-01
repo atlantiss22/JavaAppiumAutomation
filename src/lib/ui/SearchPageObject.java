@@ -11,7 +11,8 @@ public class SearchPageObject extends MainPageObject {
             SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
             SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text = '{SUBSTRING}']",
             SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
-            SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']";
+            SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']",
+            SEARCH_DEFAULT_EMPTY_RESULT_ELEMENT = "org.wikipedia:id/search_empty_image";
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
@@ -66,6 +67,10 @@ public class SearchPageObject extends MainPageObject {
 
     public void waitForEmptyResultsLabel() {
         this.waitForElementPresent(By.xpath(SEARCH_EMPTY_RESULT_ELEMENT), "Cannot find empty result element", 15);
+    }
+
+    public void waitForDefaultEmptyResultsLabel() {
+        this.waitForElementPresent(By.id(SEARCH_DEFAULT_EMPTY_RESULT_ELEMENT), "Cannot find image of empty search result", 15);
     }
 
     public void assertThereIsNoResultOfSearch() {

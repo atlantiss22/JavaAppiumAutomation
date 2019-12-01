@@ -51,4 +51,19 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject.waitForEmptyResultsLabel();
         SearchPageObject.assertThereIsNoResultOfSearch();
     }
+
+    @Test
+    public void testSearchAndCancel() {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Kotlin");
+
+        int amountOfSearchResults = SearchPageObject.getAmountOfFoundArticles();
+
+        assertTrue("There is only one search result", amountOfSearchResults > 1);
+
+        SearchPageObject.clickCancelSearch();
+        SearchPageObject.waitForDefaultEmptyResultsLabel();
+    }
 }
