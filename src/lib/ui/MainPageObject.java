@@ -5,7 +5,6 @@ import io.appium.java_client.TouchAction;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -133,14 +132,6 @@ public class MainPageObject {
     public int getAmountOfElements(By by) {
         List elements = driver.findElements(by);
         return elements.size();
-    }
-
-    public void assertElementPresent(WebElement element, String errorMessage) {
-        try {
-            element.findElement(By.id("org.wikipedia:id/view_page_title_text"));
-        } catch (NoSuchElementException e) {
-            Assert.fail(errorMessage);
-        }
     }
 
     public void assertElementNotPresent(By by, String errorMessage) {

@@ -1,7 +1,9 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 public class ArticlePageObject extends MainPageObject {
@@ -15,7 +17,8 @@ public class ArticlePageObject extends MainPageObject {
             MY_LIST_NAME_INPUT = "org.wikipedia:id/text_input",
             MY_LIST_OK_BUTTON = "//*[@text='OK']",
             CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']",
-            MY_EXISTING_LIST_TPL = "//*[@resource-id='org.wikipedia:id/item_container']//*[@text='{FOLDER}']";
+            MY_EXISTING_LIST_TPL = "//*[@resource-id='org.wikipedia:id/item_container']//*[@text='{FOLDER}']",
+            WEB_VIEW_OF_ARTICLE = "org.wikipedia:id/page_contents_container";
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
@@ -29,6 +32,10 @@ public class ArticlePageObject extends MainPageObject {
 
     public WebElement waitForTitleElement() {
         return this.waitForElementPresent(By.id(TITLE), "Cannot find article title on page!", 15);
+    }
+
+    public WebElement waitForWebView() {
+        return this.waitForElementPresent(By.id(WEB_VIEW_OF_ARTICLE), "Cannot find web view", 15);
     }
 
     public String getArticleTitle() {
@@ -112,5 +119,14 @@ public class ArticlePageObject extends MainPageObject {
                 "Cannot close article, cannot find X link",
                 5
         );
+    }
+
+    public void assertTitlePresent() {
+        WebElement element = waitForWebView();
+        try {
+            element.findElement(By.id(TITLE));
+        } catch (NoSuchElementException e) {
+            Assert.fail("Title is not present on webview");
+        }
     }
 }
