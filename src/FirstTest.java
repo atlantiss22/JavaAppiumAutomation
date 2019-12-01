@@ -221,29 +221,4 @@ public class FirstTest extends CoreTestCase {
                 "Title is not present on element: " + webView.toString()
         );
     }
-
-    @Test
-    public void testAllResultsContainSearchText() {
-        MainPageObject.waitForElementAndClick(
-                By.id("org.wikipedia:id/search_container"),
-                "Cannot find 'Search Wikipedia' input",
-                5
-        );
-
-        MainPageObject.waitForElementAndSendKeys(
-                By.id("org.wikipedia:id/search_src_text"),
-                "https",
-                "Cannot find search input",
-                5
-
-        );
-
-        List<WebElement> searchResults = MainPageObject.waitForElementsPresent(
-                By.id("org.wikipedia:id/page_list_item_container"),
-                "Cannot find results of search",
-                15
-        );
-
-        MainPageObject.checkAllResultsWithText(searchResults, "https");
-    }
 }

@@ -75,26 +75,6 @@ public class MainPageObject {
         return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
     }
 
-    public void checkAllResultsWithText(List<WebElement> results, String expectedSubstring) {
-        expectedSubstring = expectedSubstring.toLowerCase();
-        for (int i = 0; i < results.size(); i++) {
-            //Внутри результата есть заголовок и подзаголовок (или только заголовок) *или редирект
-            //=> Ищем любой элемент, который может содержать искомое слово внутри результата
-            List<WebElement> includeElements = results.get(i).findElements(By.xpath("//*"));
-
-            boolean hasText = false;
-            for (int j = 0; j < includeElements.size(); j++) {
-                if (includeElements.get(j).getText().toLowerCase().contains(expectedSubstring)) {
-                    hasText = true;
-                }
-            }
-            Assert.assertTrue(
-                    "One or more search results does not contain the search text",
-                    hasText
-            );
-        }
-    }
-
     public void swipeUp(int timeOfSwipe) {
         TouchAction action = new TouchAction(driver);
         Dimension size = driver.manage().window().getSize();

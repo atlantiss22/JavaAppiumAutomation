@@ -1,7 +1,11 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 public class SearchPageObject extends MainPageObject {
 
@@ -63,6 +67,30 @@ public class SearchPageObject extends MainPageObject {
                 15
         );
         return this.getAmountOfElements(By.xpath(SEARCH_RESULT_ELEMENT));
+    }
+
+    public List<WebElement> getAllResultsOfSearchOnFirstPage() {
+        return this.waitForElementsPresent(By.xpath(SEARCH_RESULT_ELEMENT), "Cannot find results of search", 15);
+    }
+
+    public void checkAllResultsWithText(List<WebElement> results, String expectedSubstring) {
+        expectedSubstring = expectedSubstring.toLowerCase();
+        for (int i = 0; i < results.size(); i++) {
+            //Внутри результата есть заголовок и подзаголовок (или только заголовок) *или редирект
+            //=> Ищем любой элемент, который может содержать искомое слово внутри результата
+            List<WebElement> includeElements = results.get(i).findElements(By.xpath("//*"));
+
+            boolean hasText = false;
+            for (int j = 0; j < includeElements.size(); j++) {
+                if (includeElements.get(j).getText().toLowerCase().contains(expectedSubstring)) {
+                    hasText = true;
+                }
+            }
+            Assert.assertTrue(
+                    "One or more search results does not contain the search text",
+                    hasText
+            );
+        }
     }
 
     public void waitForEmptyResultsLabel() {
