@@ -14,11 +14,18 @@ public class ArticlePageObject extends MainPageObject {
             ADD_TO_MY_LIST_OVERLAY = "org.wikipedia:id/onboarding_button",
             MY_LIST_NAME_INPUT = "org.wikipedia:id/text_input",
             MY_LIST_OK_BUTTON = "//*[@text='OK']",
-            CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']";
+            CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']",
+            MY_EXISTING_LIST_TPL = "//*[@resource-id='org.wikipedia:id/item_container']//*[@text='{FOLDER}']";
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
     }
+
+    /* TEMPLATE METHODS */
+    private static String getMyExistingList(String substring) {
+        return MY_EXISTING_LIST_TPL.replace("{FOLDER}", substring);
+    }
+    /* TEMPLATE METHODS */
 
     public WebElement waitForTitleElement() {
         return this.waitForElementPresent(By.id(TITLE), "Cannot find article title on page!", 15);
@@ -37,7 +44,7 @@ public class ArticlePageObject extends MainPageObject {
         );
     }
 
-    public void addArticleToMyList(String nameOfFolder) {
+    public void addArticleToMyFirstList(String nameOfFolder) {
 
         this.waitForElementAndClick(
                 By.xpath(OPTIONS_BUTTON),
@@ -75,6 +82,34 @@ public class ArticlePageObject extends MainPageObject {
                 "Cannot press OK button",
                 5
         );
+    }
+
+    public void addArticleToMyExistingList(String nameOfFolder) {
+
+        this.waitForElementAndClick(
+                By.xpath(OPTIONS_BUTTON),
+                "Cannot find button to open article options",
+                5
+        );
+
+        this.waitForElementAndClick(
+                By.xpath(OPTIONS_ADD_TO_MY_LIST_BUTTON),
+                "Cannot find option to add article to reading list",
+                5
+        );
+
+//        this.waitForElementAndClick(
+//                By.id(ADD_TO_MY_LIST_OVERLAY),
+//                "Cannot find 'Got it' tip overlay",
+//                5
+//        );
+
+        typeOnExistingList(nameOfFolder);
+    }
+
+    public void typeOnExistingList(String nameOfFolder) {
+        String myExistingList = getMyExistingList(nameOfFolder);
+        this.waitForElementAndClick(By.xpath(myExistingList), "Cannot find '" + nameOfFolder + "' reading list", 5);
     }
 
     public void closeArticle() {
